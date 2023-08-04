@@ -13,21 +13,28 @@ func main()  {
 	fmt.Println("Hello world")
 
 	app := fiber.New(fiber.Config{
-        Views: html.New("./views", ".html"),
+        Views: html.New("./client", ".html"),
+		Prefork: true,
     })
 
-	app.Get("/", func(c *fiber.Ctx) error {
+	app.Static("/", "./client")
+	
+	app.Get("/pong", func(c *fiber.Ctx) error {
+		return c.Render("index", "Title")
+	})
+
+	app.Get("/api/", func(c *fiber.Ctx) error {
 		fmt.Println("route hit!")
 
-		return c.JSON(map[string]interface{}{
+		return c.JSON(fiber.Map{
 			"message": "i ain't shit at coding :(",
 		})
 	})
 
-	app.Get("/:id", func(c *fiber.Ctx) error {
+	app.Get("/api/:id", func(c *fiber.Ctx) error {
 		id := c.Params("id")
 
-		return c.Status(http.StatusOK).JSON(map[string]interface{}{
+		return c.Status(http.StatusOK).JSON(fiber.Map{
 			"your id:": id,
 		})
 	})
