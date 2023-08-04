@@ -10,8 +10,6 @@ import (
 )
 
 func main()  {
-	fmt.Println("Hello world")
-
 	app := fiber.New(fiber.Config{
         Views: html.New("./client", ".html"),
 		Prefork: true,
@@ -20,7 +18,7 @@ func main()  {
 	app.Static("/", "./client")
 	
 	app.Get("/pong", func(c *fiber.Ctx) error {
-		return c.Render("index", "Title")
+		return c.Render("index", nil)
 	})
 
 	app.Get("/api/", func(c *fiber.Ctx) error {
